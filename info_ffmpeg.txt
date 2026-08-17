@@ -1,0 +1,166 @@
+=========================================
+https://superuser.com/questions/1362543/how-to-mix-multiple-images-with-audio-with-ffmpeg
+
+ffmpeg -r 1 -f concat -safe 0 -i LIST_OF_FRAMES -i AUDIO -vf fps=1 VIDEO
+ffmpeg -r 1 -f concat -safe 0 -i list.txt -i audio.m4a -vf fps=30 VIDEO.mpg
+
+
+********************************https://video.stackexchange.com/questions/21728/ffmpeg-concat-error
+The concat demuxer expects a text file as input.
+
+ffmpeg -f concat -safe 0 -i list.txt -c copy concat.avi
+where list.txt is
+
+file 'intro_prepped.avi'
+file 'intro_prepped.avi'
+
+
+============
+ffmpeg -f concat -safe 0 -i list.txt -c copy concat.mp4
+
+
+===============
+vertical media to 16:9 with blurred sides
+	ffmpeg -i input.mp4 -lavfi '[0:v]scale=ih*16/9:-1,boxblur=luma_radius=min(h\,w)/20:luma_power=1:chroma_radius=min(cw\,ch)/20:chroma_power=1[bg];[bg][0:v]overlay=(W-w)/2:(H-h)/2,crop=h=iw*9/16' -vb 800K output.webm
+	
+	
+================SPLIT VIDEO BY DURATION
+other ways
+https://filme.imyfone.com/video-editing-tips/splitting-video-with-ffmpeg/
+
+	ffmpeg -ss 00:00:00 -t 00:50:00 -i input.mp4 -acodec copy \-vcodec copy output.mp4
+	
+================ RE ENCODE 
+ffmpeg -i input.mp4 -c:v libx264 -c:a aac output.mp4
+
+
+
+** MORE
+concat
+
+file 'video1.mp4'
+file 'video2.mp4'
+
+	ffmpeg -f concat -safe 0 -i inputs.txt -c copy output.mp4
+
+==
+Check dimensions
+	ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 input.mp4
+
+
+==
+resize
+	ffmpeg -i input.mp4 -vf "scale=1280:720,setsar=1" -c:a copy resized_input.mp4
+
+==
+Pad the video (black bars on sides) to resize from 4:3-any to 16:9-1280x720 
+This keeps the original shape and fills the rest with black bars to fit 1280×720:
+
+	ffmpeg -i input.mp4 -vf "scale=iw*min(1280/iw\,720/ih):ih*min(1280/iw\,720/ih),pad=1280:720:(1280-iw*min(1280/iw\,720/ih))/2:(720-ih*min(1280/iw\,720/ih))/2,setsar=1" -c:a copy padded_input.mp4
+
+==
+overlay image over video i.e. audio + image
+
+	ffmpeg -loop 1 -i image.jpg -i input_video.mp4 -c:v libx264 -tune stillimage -c:a copy -pix_fmt yuv420p -shortest output.mp4
+	
+	
+==
+overlay image over audio
+
+	ffmpeg -loop 1 -i input.png -i input.m4a -c:v libx264 -tune stillimage -c:a copy -shortest output.mp4
+	
+if img dimensions are odd
+	ffmpeg -loop 1 -i input.png -i input.m4a -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2,format=yuv420p" -c:v libx264 -tune stillimage -c:a copy -shortest output.mp4
+	
+	
+==
+resize image
+
+# 2. Resize to exact 800x600 (May distort/stretch image)
+ffmpeg -i input.jpg -vf scale=800:600 output.jpg
+
+# 3. Resize width to 800px, auto-calculate height to keep aspect ratio
+ffmpeg -i input.jpg -vf scale=800:-1 output.jpg
+
+# 4. Resize height to 600px, auto-calculate width to keep aspect ratio
+ffmpeg -i input.jpg -vf scale=-1:600 output.jpg
+
+# 5. Resize to 50% of original size (using input width/height variables)
+ffmpeg -i input.jpg -vf "scale=iw/2:ih/2" output.jpg
+ffmpeg -i input.jpg -vf "scale=iw*2:ih*2" output.jpg
+
+# 6. Batch Loop: Resize all .jpg files in folder to 1024px width (saves to 'resized' folder)
+mkdir -p resized; for i in *.jpg; do ffmpeg -i "$i" -vf scale=1024:-1 "resized/${i%.*}.jpg"; done
+
+
+== enhance low quality video
+step 1
+	ffmpeg -i input.mp4 -vf "scale=1920:-2:flags=lanczos" -c:v libx264 -crf 20 -c:a copy output.mp4
+step 2
+	ffmpeg -i output.mp4 -vf "hqdn3d=1.5:1.5:6:6,scale=1920:-2:flags=lanczos,unsharp=5:5:0.8,eq=saturation=1.1:contrast=1.05" -c:v libx264 -crf 20 -c:a copy output_ultimate.mp4
+	
+
+== cut video, remove first 8 seconds
+	ffmpeg -ss 00:00:08 -i input.mp4 output.mp4
+	
+== extrack audio from video
+	ffmpeg -i video.mp4 -vn -c:a libmp3lame output.mp3
+
+
+== mount audio from mp4 on still image and create new video
+even dims
+	ffmpeg -loop 1 -i img.jpg -i vid.mp4 -map 0:v -map 1:a -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -shortest output.mp4
+	
+odd dims
+	ffmpeg -loop 1 -i img.jpg -i vid.mp4 -map 0:v -map 1:a -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -shortest output.mp4
+
+
+== removing background noise from a video:
+    ffmpeg -i video.mp4 -af "afftdn=nf=-25" -c:v copy output.mp4
+    wget https://raw.githubusercontent.com/richardpl/arnndn-models/master/sh.rnnn
+    ffmpeg -i video.mp4 -af "arnndn=m=sh.rnnn" -c:v copy output.mp4
+    wget https://raw.githubusercontent.com/richardpl/arnndn-models/master/std.rnnn
+    ffmpeg -i video.mp4 -af "arnndn=m=std.rnnn" -c:v copy output.mp4
+    history | tail -5
+    history | tail -10
+    history | tail -10 > log.log
+
+
+== DVD ISO
+ver resolucion de un video
+	ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 input.mp4
+
+reducir resolucion a 900p
+	ffmpeg -i input.mp4 -vf "scale=1600:900" -c:a copy output_1600x900.mp4
+
+reducir resolucion a 720p con ancho automatico manteniendo aspect ratio
+	ffmpeg -i input.mp4 -vf "scale=-1:720" -c:a copy output_720p.mp4
+	
+--
+convertir mp4 a mpg compatible con DVD
+	ffmpeg -i input.mp4 \
+	  -target ntsc-dvd -aspect 16:9 \
+	  -ac 2 -ar 48000 -b:a 192k \
+	  -b:v 6000k -maxrate 8000k -bufsize 1835k \
+	  -flags +ilme+ildct \
+	  dvd.mpg
+	
+crear estructura de DVD. Primero crear dvd.xml con
+	<dvdauthor dest="dvd" format="ntsc">
+	  <vmgm />
+	  <titleset>
+	    <titles>
+	      <pgc>
+		<vob file="dvd.mpg"/>
+	      </pgc>
+	    </titles>
+	  </titleset>
+	</dvdauthor>
+
+luego
+	dvdauthor -x dvd.xml
+	dvdauthor -o dvd -T
+	
+finalmente generar ISO
+	genisoimage -dvd-video -o dvd.iso dvd/
+

@@ -1,0 +1,220 @@
+configurar name y email en cada repo con carpeta .git
+	git config user.name "name"
+	git config user.email "email"
+
+--------------------------------------------CREAR SSH KEY
+dentro de ~/.ssh/ hacer
+	ssh-keygen
+	ssh-keygen -f ~/path/to/your_key_name
+
+dar enter en todos los prompts si se quiere que la llave tenga nombre default id_rsa, luego tomar el contenido del .pub y ponerlo en github
+
+
+--------------------------------------------PARA USAR MULTIPLES SSH
+multiple ssh keys, not the .pub files but the ones with just the name (if there's an issue, use "ssh-agent -s" first)
+	ssh-add ~/.ssh/key1
+	ssh-add ~/.ssh/key2
+
+check they were added
+	ssh-add -l
+
+change remote url
+	git remote set-url <remote_name> <remote_url>
+
+--------------------------------------------LO MAS TRICKY
+https://www.youtube.com/watch?v=N2hMGEeYR7c&ab_channel=Ashotofcode
+En ~/.ssh/ crear "config" file y poner por ejemplo:
+
+#cuenta1
+Host github.com	
+	HostName github.com
+	User git    
+	IdentityFile ~/.ssh/key1
+
+#cuenta2
+Host host2
+	HostName github.com
+	User git
+	IdentityFile ~/.ssh/key2
+
+La cuenta1 va bien por default, ya que los remotes empiezan con git@github.com y el Host de la cuenta1 es github.com.  
+El "Host" de la cuenta2 debe coincidir con el remote url del repositorio asociado i.e. hay que verificar que la parte @<parte>: sea la misma que el Host de la cuenta2. 
+e,g. 
+el ssh del repositorio es 
+	git@github.com:<usuario_github>/B2HHH_2022_1.git
+entonces al momento de agregar el remote este debe ser  
+	git@host2:<usuario_github>/B2HHH_2022_1.git
+tal que en el repo local el archivo .git/config tenga como remote url git@host2:<usuario_github>/B2HHH_2022_1.git, asi
+	url = git@github.com-test:<usuario_github>/B2HHH_2022_1.git
+
+------------------
+check ssh authentication
+	ssh -T <Host>
+	ssh -T git@github.com-test
+
+	
+################################################## CURSO GIT & GITHUB 2024
+Configuraciones globales
+
+ver configuracion
+	git config -l
+	git config -l --local
+	
+
+-------- 
+Agregar directorio seguro
+	git config --global safe.directory '*' --replace-all
+	
+o alternativamente, agrego a ~/.gitconfig
+
+[safe]
+        directory = *
+
+-------- 
+establecer main como rama principal globally 
+	git config --global init.defaultBranch main
+
+
+-------------------------------------------------- para empezar
+	git remote add origin <https del repo>
+	git pull origin main --no-rebase --allow-unrelated-histories
+
+luego si
+	git push origin main	
+--------------------------------------------------
+ver el historial 
+	git log
+	git log --stat
+	git log --all
+	git log --all --graph
+	git log --all --graph --oneline
+	git log --all --graph --oneline --decorate
+	git log --oneline	 # util para ver hashes cortos de los commits 
+
+historial mas completo
+	git reflog
+
+para visualizacion con ui
+	gitk
+
+... resetear
+	git reset --hard <hash> 	# volver a un commit especifico con su hash y borrar todo lo posterior
+	git reset --soft <hash> 	# """", manteniendo lo que está en staging	
+	
+... ver branches
+	git show-branch
+	git show-branch --all
+	
+... ver contenido de commits
+	git show <hash>			# todos los cambios
+	git show --stat <hash>		# solo archivos que cambiaron
+	git show <HASH> -- <filename>	# solo cambios de un archivo
+	git diff <HASH>~1 <HASH>	# alternativa con diff
+	
+--------------------------------------------------
+informacion sobre el remote y como agregar un "upstream" (nombre comun) remote para actualizar fork
+	git remote
+	git remote -v
+	git remote add <mi_remote_name> <ssh o https del remote>
+	
+e.g.
+	git remote add mi_upstream git@github.com:<usuario_github>/test1.git
+	
+luego de eso se puede fusionar la rama local con la del nuevo remote que está mas actualizada
+	git pull mi_upstream main
+	
+y ahora que mi version local es la mas actualizada segun el upstream, hago push a mi origin (mi fork)
+
+Todo esto tambien se puede hacer desde github con UI mas facil.
+
+-------------------------------------------------- stash
+guardo los cambios recientes en un lugar temporal, lo que me lleva de vuelta al ultimo commit
+	git stash
+	git stash list	 # para ver que hay en el stash
+	
+	git stash pop 	# para retomar esos ultimos cambios
+	git stash drop 	# para desechar esos cambios stasheados
+	
+	git stash branch <branch_name> 	# para llevarse los cambios stasheados a una nueva rama 
+	
+-------------------------------------------------- clean
+	git clean 	# no funciona solo
+	git clean -f 	# fuerza el borrar 
+	git clean --dry-run 	# dice lo que se va a borrar
+
+-------------------------------------------------- amend
+cambios sobre el ultimo sin crear un nuevo commit
+ 	git add .
+	git commit --amend 	
+	
+luego de usar amend se debe hacer push --force o --force-with-lease para que el remoto reciba los cambios al ultimo commit sin conflictos
+
+-------------------------------------------------- otros
+	git cherry-pick <hash> 	# traer cambios especificos de un commit de otra rama, con su hash
+	
+	git grep -c <keyword> (o "<keyword>")	# cuenta la palabra clave en el proyecto
+	git grep -n <keyword> 	# dice en los archivos y la linea donde está la keyword en el proyecto  
+	git log -S <keyword> 	# muestra la keyword en el log del proyecto 
+	
+	git shortlog 	# commits hechos por usuarios
+	git shortlog -sn
+	git shortlog -sn --all
+	git shortlog -sn --all --no-merges
+
+	git blame <file_name> 	# usuario que hizo los cambios en ese archivo
+	git blame -c <file_name> 	
+	git blame <file_name> -LX,Y 	# ver cambios en un archivo desde la linea X hasta la Y
+	
+	git branch -r 	# muestra ramas remotas
+	git branch -a 	# muestra todas las ramas, locales y remotas
+-------------------------------------------------- alias
+crear alias en git, ejemplo:
+	git config alias.stats "shortlog -sn --all --no-merges"
+luego 
+	git stats
+ejecutara
+	git shortlog -sn --all --no-merges
+	
+	
+	
+	
+---------- MIS NUEVAS NOTAS
+----------
+Si hice git clone y parezco tener una rama diferente a la que me interesa en el remote
+
+# 1. Fetch and list all remote branches
+git fetch
+git branch -r
+
+# 2. Fetch a specific remote branch without switching (puede no ser necesario, saltar a #3)
+git fetch origin feature-branch
+
+# 3. Check out a specific remote branch and create a local branch
+git checkout -b feature-branch origin/feature-branch
+
+# 4. Shortcut to create a local tracking branch
+git checkout --track origin/feature-branch
+
+# 5. Pull changes from the branch
+git pull
+
+... Commit en que se creo un archivo
+	git log --diff-filter=A --follow -- path/to/file.py
+
+
+... Dejar de trackear archivos despues de agregarlos en gitignore
+primero quitar todo de git
+	git rm -r --cached .	
+luego normal
+	git add .
+	git status
+	git commit
+
+
+... estilizador 
+	sudo apt install git-delta
+	git config --global core.pager "delta"
+	git config --global interactive.diffFilter "delta --color-only"
+	
+... revertir configuraciones, ejemplo la de "core.pager"
+	git config --global --unset core.pager

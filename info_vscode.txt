@@ -1,0 +1,8 @@
+-------- indentacion del arbol de la izquierda
+1. Ctrl + Shift + P
+2. Preferences: Open Settings
+3. Workbench tree indent: 27
+
+----
+ctrl + D
+ctrl + shift + up/down

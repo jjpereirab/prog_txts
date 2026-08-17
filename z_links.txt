@@ -1,0 +1,24 @@
+https://machinelearningmastery.com/lasso-regression-with-python/
+
+--------------
+dev community
+https://dev.to/
+
+mobile SDK
+https://ionicframework.com/
+
+--------------
+python project . Youtube downloader
+https://youtu.be/zT7niRUOs9o?si=GmaMyaIeBc-fg1cc&t=1145
+
+--------------
+Triangulo de Sierpinsky en python
+https://www.youtube.com/watch?v=6sodo_3gBnQ&ab_channel=EdgarDelgado
+
+--------------
+python MySQL tutorial	
+https://www.youtube.com/watch?v=3vsC05rxZ8c&list=PLzMcBGfZo4-l5kVSNVKGO60V6RkXAVtp-&t=0s&ab_channel=TechWithTim
+	
+Plotly	
+https://plotly.com/python/scatter-plots-on-maps/
+

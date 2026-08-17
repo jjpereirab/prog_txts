@@ -1,0 +1,96 @@
+for an ipython code block
+	%cpaste   #to start
+	--        #to submit
+	
+	
+	
+================ VENVS
+python -m venv venvName
+source venvName/bin/activate
+
+for jupyter in the venv
+	ipython kernel install --user --name=venvName
+	
+then select the desired kernel inside a jupyter notebook. 
+
+To delete it
+	jupyter kernelspec list
+and delete the folder	
+
+
+#--------------------------------
+x = 0
+y = 0
+h1 = 4
+h2 = 5
+
+def fun(i):
+    h1 = 10
+    x = locals()['h'+str(i)]
+    y = globals()['h'+str(i)]
+    return x, y
+
+fun(1)
+
+output: (10,4)
+#--------------------------------
+
+"""
+    data.x = getattr(data,"x")
+"""
+
+
+......................... MORE TOOLS
+
+cool plots colorbars
+https://matplotlib.org/2.0.2/examples/pylab_examples/custom_cmap.html
+
+//---------------------------------------PDF MERGER
+
+pdfs = []
+
+...
+
+canvas.SaveAs("pdf07.pdf")
+pdfs.append("pdf07.pdf")
+...
+
+
+!pip install PyPDF2
+from PyPDF2 import PdfFileMerger
+
+merger = PdfFileMerger()
+
+for pdf in pdfs:
+    merger.append(pdf)
+
+merger.write("03_Distro_Plots.pdf")
+merger.close()
+
+// --------------------------------------LIST TO TXT
+items = ['Mango', 'Orange', 'Apple', 'Lemon']
+file = open('items.txt','w')
+for the item in items:
+	file.write(item+"\n")
+file.close()
+
+or 
+
+with open("output.txt", "w") as txt_file:
+    for line in items: 
+    	txt_file.write(line + "\n") 
+
+
+// run local python server
+    python -m http.server 8080
+
+
+... pip
+instalar 
+	conda install pip
+	
+deinstalar todos los paquetes
+	pip freeze | xargs pip uninstall -y
+	
+guardar requirements
+	pip freeze > requirements.txt

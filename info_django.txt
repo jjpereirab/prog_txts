@@ -1,0 +1,7 @@
+python manage.py or ./manage.py
+
+para ingresar a una shell que tiene el proyecto cargado
+	python manage.py dbshell
+	
+usuarios del sistema
+	from django.contrib.auth.models import User

@@ -1,0 +1,7 @@
+1 crash logs - commands to get the logs 
+https://askubuntu.com/questions/244387/how-to-diagnose-random-freezes
+	less /var/log/syslog
+	less /var/log/Xorg.0.log
+
+2 asus tuf crashes microsoft forum - "max processor state"
+https://answers.microsoft.com/en-us/windows/forum/all/repeated-crashes-and-bsod-on-asus-tuf-a15/6bee2a65-2715-4cb0-b69a-4003eac941bf?page=2

@@ -1,0 +1,22 @@
+https://root.cern.ch/doc/master/classRooAbsPdf.html
+https://root.cern.ch/doc/master/classRooAddPdf.html
+https://python.hotexamples.com/es/examples/ROOT/RooDataSet/-/python-roodataset-class-examples.html
+
+
+filling rootdataset event by event
+https://root-forum.cern.ch/t/reduce-ing-specific-observables-in-roodataset/43897/4
+
+
+
+  // Create combined weight branch in tree0
+  const char* weight_var = "w_total";
+  Double_t w_val;
+  TBranch *b_weight = tree0->Branch(weight_var, &w_val, Form("%s/D", weight_var));
+  TLeaf *l_eff = tree0->GetLeaf("total_L0HadronEff");
+  TLeaf *l_gb = tree0->GetLeaf("GBWeight");
+  
+  for(int i=0; i<tree0->GetEntries(); i++){
+      tree0->GetEntry(i);
+      w_val = l_eff->GetValue() * l_gb->GetValue();
+      b_weight->Fill();
+  }

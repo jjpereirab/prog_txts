@@ -1,0 +1,21 @@
+listar perfiles
+	gcloud config configurations list
+	
+crear nuevo (el <nombre> en este caso es "personal")
+	gcloud config configurations create <nombre>
+	gcloud config configurations create personal
+	
+autenticar, lo que abrira el navegador
+	gcloud auth login
+
+asignar proyecto a perfil
+	gcloud config set project TU_ID_DE_PROYECTO
+
+configurar ADC (application default credentials)
+	gcloud auth application-default login
+	gcloud auth application-default set-quota-project TU_ID_DE_PROYECTO
+
+--
+activar otro perfil
+	gcloud config configurations activate <nombre>
+	

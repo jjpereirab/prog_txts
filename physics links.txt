@@ -1,0 +1,6 @@
+Gaussian units
+http://www.physics.rutgers.edu/~abrooks/342/constants.html
+
+Latex tables
+https://www.tablesgenerator.com/
+

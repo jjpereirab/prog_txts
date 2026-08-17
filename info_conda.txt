@@ -1,0 +1,22 @@
+-------- conda envs
+listar
+	conda env list
+	
+exportar 
+	conda env export --name env_name > environment.yml
+
+cargar
+	conda env create --name env_name --file environment.yml
+
+actualizar entorno actual
+	conda env update --name MI_ENTORNO --file entorno.yml
+
+
+crear entorno 
+	conda create -n mi_entorno
+
+crear entorno con python
+	conda create -n mi_entorno python
+
+borrar 
+	conda env remove -n nombre_entorno

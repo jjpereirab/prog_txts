@@ -1,0 +1,56 @@
+------------------------------UNDERSTANDING XMLS--------------------------------
+https://towardsdatascience.com/processing-xml-in-python-elementtree-c8992941efd2
+--------------------------------------------------------------------------------
+
+for child in root:
+	for candy in child:
+		for flavor in candy:
+			print(child.tag, child.attrib, "--", candy.tag, candy.attrib, "\n\t", flavor.tag, flavor.attrib)
+
+
+for child in root:
+	for candy in child:
+		for flavor in candy:
+			print(flavor.tag, flavor.attrib)
+
+
+[elem.tag for elem in root.iter()]
+
+[elem.attrib for elem in root.iter()]
+
+for movie in root.iter('pfn'):
+    print(movie.attrib)
+
+for pfn in root.iter('pfn'):
+    print(pfn.attrib["name"])
+
+
+
+pfn_list = []
+for pfn in root.iter('pfn'):
+    pfn_list.append(pfn.attrib["name"])
+
+len(pfn_list)
+
+---------faltan pfns???
+
+
+pfn_list = []
+for child in root:
+	for candy in child:
+		for flavor in candy:
+			pfn_list.append(flavor.attrib["name"])
+
+len(pfn_list)
+
+
+-------------go
+
+pfn_list = []
+for child in root:
+	for candy in child:
+		for flavor in candy:
+			if flavor.tag == "pfn":
+				pfn_list.append(flavor.attrib["name"])
+				break
+len(pfn_list)

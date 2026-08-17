@@ -1,0 +1,32 @@
+Copy (Yank) a Line
+	yy – Copy the current line.
+	3yy – Copy 3 lines starting from the current line.
+
+Paste a Line
+	p – Paste the copied line below the cursor.
+	P – Paste the copied line above the cursor.
+
+Cut Lines
+	dd – Cut the current line.
+	3dd – Cut 3 lines starting from the current line.
+
+select several lines
+	shift + v 
+
+search
+	/<word>
+	then n to go next, N to go back
+
+search and replace in all lines
+	:%s/<replace_this>/<with_this>/g
+
+delete all
+	:%d
+
+select all
+	ggVG
+
+
+================= settings
+in .vimrc
+	:set number

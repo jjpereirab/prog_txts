@@ -1,0 +1,105 @@
+General system info
+	uname -a
+
+Detailed OS info
+	cat /etc/os-release
+
+Linux kernel version 
+	uname -r
+
+Ubuntu
+	lsb_release -a
+
+---------
+para que sirva [shift + inicio]
+	instalar tweaks
+	keyboard > additional layouts options > compatibility options > num lock...
+	
+------------------------------------------------------------------------
+CLICK en iconos de barra de herramientas - Open a Terminal window and run the command:
+	gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize'
+keep window picker
+	gsettings set org.gnome.shell.extensions.dash-to-dock click-action 'minimize-or-previews'
+	
+------------------------------------------------------------------------
+remove packages https://linuxhint.com/uninstall-package-ubuntu-2/
+	sudo apt list --installed 
+	sudo apt list --installed | grep appname
+	sudo apt-get remove appnamae
+	sudo apt autoremove
+
+------------------------------------------------------------------------
+accesos directos shortcut
+	ln -s from/ to/
+	ln -sr from/ to/	
+
+from/ debe ser un "absolut path", es decir empezando desde /
+
+------------------------------------------------------------------------
+hide mounts from dock 
+	https://www.omgubuntu.co.uk/2019/11/hide-mounted-drives-ubuntu-dock#:~:text=You%20can%20access%20the%20same,toggle%20to%20the%20off%20position.
+	gsettings set org.gnome.shell.extensions.dash-to-dock show-mounts false
+	gsettings set org.gnome.shell.extensions.dash-to-dock show-mounts true
+	dconf > org > gnome > shell > extensions > dash-to-dock > show mounts
+
+auto-mount drive
+	se hace en la app disks, editando las mount options
+
+------------------------------------------------------------------------
+reset wifi
+	sudo rm -f /etc/NetworkManager/system-connections/*; sudo pkill -9 NetworkManager
+
+------------------------------------------------------------------------
+disable screenshot sound
+	sudo mv /usr/share/sounds/freedesktop/stereo/camera-shutter.oga /usr/share/sounds/freedesktop/stereo/camera-shutter-disabled.oga
+	
+------------------------------------------------------------------------
+========== FIX UBUNTU FROM USB (NETWORK-MANAGER DELETED)
+https://askubuntu.com/questions/422928/how-to-reinstall-network-manager-without-internet-access
+---
+
+fdisk -l
+/dev/<particion>
+
+
+mount /dev/<particion> /mnt
+mount --bind /dev /mnt/dev
+mount --bind /sys /mnt/sys
+mount --bind /proc /mnt/proc
+
+chroot /mnt
+
+Edit your /etc/resolve.conf and add at least one nameserver:
+
+nameserver 8.8.8.8 # Google Public DNS
+
+Now it should work, in terminal type
+
+sudo apt-get update
+sudo apt-get install network-manager
+
+------------------------------------------------------------------------
+
+========== tema de software updates
+about offline-update-competed file
+https://askubuntu.com/questions/1469200/how-can-i-dismiss-software-updates-installed-notification
+
+"
+I found an old discussion about the problem on the Debian forums 
+https://forums.debian.net/viewtopic.php?t=121809
+
+The solution is to delete the logfile at /var/lib/PackageKit/offline-update-competed. This solved the problem for me and is less invasive than removing "gnome-software".
+"
+
+========== CRASHES
+https://askubuntu.com/questions/1068720/what-can-i-do-to-find-the-crash-reason
+get logs list
+	journalctl --list-boots
+get first log 
+	journalctl -b -1 -e
+	
+
+----------- nvidia
+configuracion de nvidia 
+	nvidia-settings
+

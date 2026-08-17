@@ -1,0 +1,57 @@
+sudo apt install postgresql
+
+comandos basicos 
+	sudo systemctl start postgresql
+	sudo systemctl stop postgresql
+	sudo systemctl restart postgresql
+	sudo systemctl status postgresql
+
+conectarse como usuario default
+	sudo -u postgres psql
+
+dentro
+	CREATE DATABASE mi_base_de_datos;
+
+
+	\du # listar usuarios
+	\l # listar bases de datos
+	
+crear usuario, nase de datos, y privilegios
+	CREATE USER nuevo_usuario;
+	CREATE DATABASE nueva_db OWNER nuevo_usuario;
+	GRANT ALL PRIVILEGES ON DATABASE nueva_db TO nuevo_usuario;
+
+cambiar contraseña
+	ALTER USER mi_usuario WITH PASSWORD 'nueva_contraseña';
+
+para entrar a una base de datos mi_db con el usuario predeterminado (<usuario>)
+	psql -h localhost mi_db
+	psql -U USUARIO -h localhost -d DATABASE
+	
+	
+------------------- eliminar
+	DROP DATABASE mi_base_de_datos;
+	DROP DATABASE mi_base_de_datos WITH (FORCE);
+
+
+
+================ de info_dbs
+once postgres and pgadmin are installed
+https://www.youtube.com/watch?v=UGfteFq_6Co
+
+to get in the postgres bash run 
+	sudo -u postgres psql
+	
+once inside the postgres bash
+	alter user postgres with password 'mypassword'
+	
+------------
+parar mirar los procesos en el puerto
+	sudo ss -lptn 'sport = :5432'
+	
+para parar postgres
+	sudo systemctl stop postgresql
+
+para iniciarlo de nuevo
+	sudo systemctl start postgresql
+

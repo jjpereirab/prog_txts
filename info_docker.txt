@@ -1,0 +1,134 @@
+instalacion
+https://docs.docker.com/engine/install/ubuntu/
+
+problema de sudo
+	sudo groupadd docker  # (Si el grupo ya existe, este comando no hará nada)
+	sudo usermod -aG docker $USER
+	newgrp docker  # Aplica los cambios al grupo sin necesidad de cerrar sesión
+
+--------------------------------------------------
+listar imagenes
+	docker images
+listar contenedores
+	docker ps
+	docker ps -a	   # listar todos
+	docker ps --size   # mostrar tamaño 
+
+construir imagen donde hay un Dockerfile
+	docker build . # mala practica
+	docker build -t <repo_name>:<tag> . 
+	
+una vez existe la imagen, crear el contenedor
+	docker run <REPOSITORY> # mala practica
+	docker run -it --rm -d --name cont <REPOSITORY> # mejor
+	docker run -it --rm -d -p 8080:80 --name web <REPOSITORY> # caso especifico
+	
+	docker run → Ejecuta un nuevo contenedor basado en una imagen.
+	-it → Modo interactivo con pseudo-TTY (útil para interactuar con la terminal del contenedor).
+	--rm → Elimina automáticamente el contenedor cuando se detiene.
+	-d → Ejecuta el contenedor en segundo plano (modo "detached" y seguir usando la misma terminal).
+	-p 8080:80 → Mapea el puerto 80 del contenedor al puerto 8080 del host.
+	--name web → pone nombre "web" al contenedor
+	<REPOSITORY> → Especifica la imagen que se usará para el contenedor.	
+
+con volumen
+	docker run -it --rm -d -p 8080:80 -v <origen:<destino> --name <nombre> <imagen>
+
+detener contenedor
+	docker stop <CONTAINER ID>
+	docker stop <NAMES>
+
+ingresar al contenedor
+	docker exec -ti <NAMES> bash
+
+ejecutar contenedor "Exited"
+	docker start <ID_o_NOMBRE_DEL_CONTENEDOR> # detached
+	docker start -a <ID_o_NOMBRE_DEL_CONTENEDOR> # primer plano
+	
+	
+---- BORRAR
+borrar imagen
+	docker rmi -f <IMAGE ID>
+	
+remove all containers
+	docker rm <ID_o_NOMBRE_DEL_CONTENEDOR> 
+	docker rm $(docker ps --all -q) # todos
+	docker rm $(docker ps -aq --filter "status=exited") # todos los Exited
+
+remove all images
+	docker rmi $(docker images -a -q)
+	
+	
+---- GUARDAR Y CARGAR IMAGEN
+para guardar mi imagen con <REPOSITORY> name "webclaire"
+    docker save webclaire > nombre.rar
+
+para cargar la imagen, digamos en otra maquina
+    docker load --input nombre.rar
+
+
+# =============================================== VARIOS
+ver logs de contenedor
+	docker logs -f <container_id_o_nombre>
+	
+mantener contenedor activo sin hacer nada
+	CMD ["tail", "-f", "/dev/null"]
+	
+ver estadisticas de contenedor
+	docker stats
+	
+buscar linea de la lista "docker ps" que empieza por "vsc" con grep e imprimir el primer elemento y awk
+	docker ps | grep vsc | awk '{print $1}'
+
+abrir bash interactiva en contenedor
+	docker exec -ti <container ID> bash
+	docker exec -ti <container ID> sh
+
+copiar desde docker 
+	docker cp <container ID>:/<origen> /<destino>
+	docker cp e70f09a61314:/tmp/tribute /<destino>
+
+access the container while it's running
+	docker exec -it ConstainerID bash
+
+
+
+## =============================================== COSAS DE TRIBUTE
+
+in Dockerfile
+	sox=14.4.2+git20190427-2+deb11u2 \
+	# xvfb=2:1.20.11-1 \	
+	postgresql-client-13=13.9-0+deb11u1 \	
+	
+then		
+	docker-compose build --no-cache
+	docker-compose build django
+	
+	docker-compose up
+	
+then run migrations		
+	sudo docker-compose run --service-port  --rm django   poetry run  python manage.py migrate
+
+then these commands should work
+	sudo docker-compose run --service-port --rm django poetry run python manage.py shell
+	docker-compose run --service-port --rm django poetry run python manage.py runserver 0.0.0.0:8000
+
+jupyter lab
+	sudo docker-compose run --service-port  --rm django poetry run jupyter lab --allow-root --no-browser
+	docker-compose run --service-port  --rm django poetry run which python -m jupyter lab --ServerApp.token='' --ServerApp.password='' --ServerApp.ip='0.0.0.0' --no-browser
+
+
+
+======= instalar en otro path
+crear symlink (any program looking for /var/lib/docker is automatically redirected)
+	sudo ln -s /mi_folder_path/ /var/lib/docker
+	
+instalar docker normal
+
+ver donde esta el root dir
+	docker info | grep "Docker Root Dir"
+
+== comenzar
+
+iniciar docker
+	sudo systemctl start docker

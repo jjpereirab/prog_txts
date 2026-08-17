@@ -1,0 +1,45 @@
+curl -X POST http://127.0.0.1:8000/crud_api/prod/ \
+     -H "Content-Type: application/json" \
+     -d '{
+           "nombre": "Laptop Gamer",
+           "descripcion": "Laptop con tarjeta gráfica dedicada RTX 4090",
+           "precio": 1199.99,
+           "disponible": true,
+           "foto": null
+         }'
+
+
+curl -X GET http://127.0.0.1:8000/productos/crud_api \
+     -H "Content-Type: application/json" \
+         
+curl -X GET http://127.0.0.1:8000/productos/crud_api/1/ \
+     -H "Content-Type: application/json"
+      
+      
+curl -X PATCH "http://127.0.0.1:8000/productos/crud_api/2/" \
+     -H "Content-Type: application/json" \
+     -d '{"precio": 7.50}'
+     
+
+curl -X delete http://127.0.0.1:8000/productos/crud_api/4/ \
+     -H "Content-Type: application/json"
+      
+      
+      
+      
+curl -X post "http://127.0.0.1:8000/crud_api/ord/"  -H "Content-Type: application/json" -d '{
+        "usuario": 1,
+        "productos": [            {
+                "producto": 1,
+                "producto_nombre": "mouse",
+                "cantidad": 1
+            }]               
+    }'
+    
+
+normal
+	curl -X GET "https://randomuser.me/api/"
+json formateado
+	curl -s "https://randomuser.me/api/" | jq
+
+

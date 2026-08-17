@@ -1,0 +1,62 @@
+find file
+	find . -name "Bu_phi*"
+
+grab item from inside file
+	grep EventType Bu_*.dec
+	
+check size
+	du -h folder
+	du -hs folder
+	
+tamaño de todos los archivos y carpetas en directorio actual 
+	du -sh ./*
+	
+	*du disk usage
+	*s summary para evitar subfolders
+	*h humanly readable
+
+----------------------------------
+remove packages with pip, listed with conda list containing work "jupyter"
+	conda list | grep jupyter | awk '{print $1}' | xargs pip uninstall -y
+
+
+
+
+
+----------------------------------	
+copy certain files from folder afold to folder bfold
+	find afold \( -name "*.root" -or -name "*.log" \) -exec cp --parents {} bfold \;
+
+
+... 
+10 archivos mas pesado
+	find . -type f -exec du -h {} + | sort -rh | head -n 10
+
+10 carpetas mas pesadas
+	du -h --max-depth=1 | sort -rh | head -n 10
+	
+...
+comprimir folder
+	zip -r nombre-del-archivo.zip carpeta-a-comprimir
+
+...
+csv super compresion
+	xz -9 -T0 your_file.csv
+
+...
+guardar ultimos 20 comandos de bash
+	history | tail -n 20 > comandos_recientes.txt
+Guardar en archivo y mostrar en pantalla (Bash)
+	history | tail -n 20 | tee comandos.log
+	
+...
+reclamar propiedad de carpeta y subcarpetas
+	sudo chown -R <usuario>:<grupo> <folder>
+localmente simply	
+	sudo chown -R <usuario>:<usuario> <folder>
+	*sudo CHange OWNer -Recursivo user:group carpeta
+
+...
+eliminar archivos por tamaño
+	find . -type f -size -80k -delete # menores a 80 KB
+	find . -type f -size +80k -delete # mayores a 80 KB

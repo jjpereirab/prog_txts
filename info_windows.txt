@@ -1,0 +1,32 @@
+=========================================== WINDOWS
+language fix: en powershell
+	Get-WinUserLanguageList
+	Set-WinUserLanguageList <tag>
+e.g.
+	Set-WinUserLanguageList es-ES
+------------------------------------------
+Abrir settings.json 
+	shift + configuracion en boton desplegable
+
+o mirar "Acciones" en Configuracion de la terminal
+	ctrl + shift + ,
+	ctrl + alt + ,
+
+pegar varias lineas terminal windows (multilinepasting)
+https://learn.microsoft.com/es-es/windows/terminal/customize-settings/interaction
+
+
+
+============================================ ARCHIVOS OCULTOS EN PENDRIVES
+En el cmd:
+
+* escribes la letra de la unidad asi ejemplo: j: (es importante los dos puntos al final) 
+* y luego le dan enter. 
+
+de esta forma entramos al directorio de la usb. Ahora escriben enseguida la seguiente secuencia: 
+
+	attrib -s -h -r /s /d 
+	
+	
+==== reparar disco
+	chkdsk C: /f /r /x
