@@ -60,3 +60,18 @@ localmente simply
 eliminar archivos por tamaño
 	find . -type f -size -80k -delete # menores a 80 KB
 	find . -type f -size +80k -delete # mayores a 80 KB
+
+
+...
+finds `.git` paths at depth 2 and extracts the directory immediately below the current directory.
+	find . -mindepth 2 -maxdepth 2 -type d -name ".git" | cut -d'/' -f2
+
+1. `find .` starts the search from the current directory (`.`).
+2. `-mindepth 2` excludes anything at depth 0 or 1, so only paths at least two levels deep are considered.
+3. `-maxdepth 2` prevents searching deeper than level 2, so together with `-mindepth 2` only depth 2 is searched.
+4. `-type d` tells `find` to match only directories (`d` = directory).
+5. `-name ".git"` tells `find` to match only directories whose name is exactly `.git`.
+6. Overall, the command finds `.git` directories that are exactly two levels below the current directory.
+7. `|` pipes the output of `find` into the next command.
+8. `cut -d'/'` tells `cut` to use `/` as the delimiter between fields.
+9. `-f2` tells `cut` to output only the second field.
