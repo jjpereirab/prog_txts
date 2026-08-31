@@ -103,3 +103,30 @@ get first log
 configuracion de nvidia 
 	nvidia-settings
 
+
+----------- sign NVIDIA Drivers / para los crashes de chrome
+1. run
+	sudo mokutil --import /var/lib/shim-signed/mok/MOK.der
+
+* You will be prompted to create a password. 
+* Use something simple (like 12345678) because you only need it once, and the blue screen in the next step defaults to a standard US English keyboard layout (which can make typing complex symbols difficult).
+
+2. reboot
+	sudo reboot
+
+3. When the computer restarts, it will pause on a blue screen titled "Perform MOK management" before loading Ubuntu.
+
+* Press any key immediately to stop the 10-second countdown.
+* Select "Enroll MOK".
+* Select "Continue", then choose "Yes".
+* Enter the password you created in Step 1 (the characters will remain invisible as you type).
+* Select "Reboot".
+
+4. Once you are back at the Ubuntu desktop, open your terminal and check if the driver is successfully communicating with the GPU:
+
+Run this command:
+	nvidia-smi
+
+If this command outputs a table showing your graphics card details, Secure Boot has accepted the driver and your GNOME Shell crashes should be completely resolved. 
+
+(Note: If Step 1 gives you a "file not found" error, let me know—it just means we need to run one quick command to regenerate the key first).

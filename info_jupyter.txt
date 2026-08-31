@@ -1,6 +1,12 @@
-flush it when slow at kernel loading
+-- flush it when slow at kernel loading
 	jupyter notebook stop 8888
 	rm -rf ~/.local/share/jupyter/runtime/*
 	
-iniciar en puerto 9999
+-- iniciar en puerto 9999
 	jupyter notebook --NotebookApp.port=9999
+
+-- en nuevas versiones de jupyter
+en lugar de 
+	%matplotlib notebook
+usar 
+	%matplotlib inline
