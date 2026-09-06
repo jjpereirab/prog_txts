@@ -6,14 +6,18 @@ problema de sudo
 	sudo usermod -aG docker $USER
 	newgrp docker  # Aplica los cambios al grupo sin necesidad de cerrar sesión
 
---------------------------------------------------
+-------------------------------------------------- LISTAR
 listar imagenes
 	docker images
 listar contenedores
 	docker ps
 	docker ps -a	   # listar todos
 	docker ps --size   # mostrar tamaño 
+listar volumenes
+	docker system df -v
 
+
+---
 construir imagen donde hay un Dockerfile
 	docker build . # mala practica
 	docker build -t <repo_name>:<tag> . 
@@ -58,7 +62,10 @@ remove all containers
 remove all images
 	docker rmi $(docker images -a -q)
 	
-	
+borrar volumenes
+	docker system prune --all --volumes --force
+
+
 ---- GUARDAR Y CARGAR IMAGEN
 para guardar mi imagen con <REPOSITORY> name "webclaire"
     docker save webclaire > nombre.rar
@@ -92,43 +99,5 @@ access the container while it's running
 	docker exec -it ConstainerID bash
 
 
-
-## =============================================== COSAS DE TRIBUTE
-
-in Dockerfile
-	sox=14.4.2+git20190427-2+deb11u2 \
-	# xvfb=2:1.20.11-1 \	
-	postgresql-client-13=13.9-0+deb11u1 \	
-	
-then		
-	docker-compose build --no-cache
-	docker-compose build django
-	
-	docker-compose up
-	
-then run migrations		
-	sudo docker-compose run --service-port  --rm django   poetry run  python manage.py migrate
-
-then these commands should work
-	sudo docker-compose run --service-port --rm django poetry run python manage.py shell
-	docker-compose run --service-port --rm django poetry run python manage.py runserver 0.0.0.0:8000
-
-jupyter lab
-	sudo docker-compose run --service-port  --rm django poetry run jupyter lab --allow-root --no-browser
-	docker-compose run --service-port  --rm django poetry run which python -m jupyter lab --ServerApp.token='' --ServerApp.password='' --ServerApp.ip='0.0.0.0' --no-browser
-
-
-
-======= instalar en otro path
-crear symlink (any program looking for /var/lib/docker is automatically redirected)
-	sudo ln -s /mi_folder_path/ /var/lib/docker
-	
-instalar docker normal
-
-ver donde esta el root dir
-	docker info | grep "Docker Root Dir"
-
-== comenzar
-
-iniciar docker
-	sudo systemctl start docker
+--- compose down
+	docker compose down --rmi all --volumes

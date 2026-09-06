@@ -21,7 +21,7 @@ crear usuario, nase de datos, y privilegios
 	CREATE DATABASE nueva_db OWNER nuevo_usuario;
 	GRANT ALL PRIVILEGES ON DATABASE nueva_db TO nuevo_usuario;
 
-cambiar contraseña
+cambiar contraseña (el usuario default es 'postgres')
 	ALTER USER mi_usuario WITH PASSWORD 'nueva_contraseña';
 
 para entrar a una base de datos mi_db con el usuario predeterminado (<usuario>)
@@ -48,10 +48,14 @@ once inside the postgres bash
 ------------
 parar mirar los procesos en el puerto
 	sudo ss -lptn 'sport = :5432'
-	
-para parar postgres
-	sudo systemctl stop postgresql
 
-para iniciarlo de nuevo
-	sudo systemctl start postgresql
 
+---
+deshabilitar inicio automatico en ubuntu
+	sudo systemctl disable postgresql
+
+
+--- puerto alternativo a 5432
+modificar el archivo de configuracion de PostgreSQL
+	sudo nano /etc/postgresql/$(ls /etc/postgresql)/main/postgresql.conf
+cambiar el port

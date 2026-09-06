@@ -130,3 +130,11 @@ Run this command:
 If this command outputs a table showing your graphics card details, Secure Boot has accepted the driver and your GNOME Shell crashes should be completely resolved. 
 
 (Note: If Step 1 gives you a "file not found" error, let me know—it just means we need to run one quick command to regenerate the key first).
+
+
+--- pdftotext
+pdftotext is a command-line tool from the poppler-utils system package                                
+    	sudo apt install poppler-utils   # Debian/Ubuntu
+     
+use 
+	pdftotext doc.pdf doc.txt
