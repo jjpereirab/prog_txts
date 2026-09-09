@@ -59,3 +59,12 @@ deshabilitar inicio automatico en ubuntu
 modificar el archivo de configuracion de PostgreSQL
 	sudo nano /etc/postgresql/$(ls /etc/postgresql)/main/postgresql.conf
 cambiar el port
+
+
+--- INDEXACION
+crear
+    CREATE INDEX idx_tran_fecha_estado ON transacciones (order_date, delivery_status);
+borrar 
+    DROP INDEX idx_tran_fecha_estado;
+borrar a prueba de error
+	DROP INDEX IF EXISTS idx_tran_fecha_estado;
