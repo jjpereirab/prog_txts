@@ -1,0 +1,63 @@
+================================================================================
+GUIA TECNICA BREVE: PROMPT ENGINEERING PARA SKILLS DE AGENTES (LLM)
+================================================================================
+
+1. TERMINOLOGIA BASE
+--------------------------------------------------------------------------------
+- Prompt Engineering: Diseño de estructuras de texto e instrucciones para 
+  controlar como "piensa" y procesa la informacion un LLM.
+- LLMOps: Operaciones de infraestructura de IA (despliegue, monitoreo, 
+  costos, fine-tuning). No confundir con el diseño del prompt.
+
+2. PRINCIPIOS DE DISENO (Por que estructurar los prompts)
+--------------------------------------------------------------------------------
+- Ventana de Contexto: Un prompt estructurado de 150 tokens no impacta 
+  negativamente el rendimiento frente a uno de 50 tokens (los LLM modernos 
+  manejan +128k tokens).
+- Prevencion de "Secuestro de Atencion": Si el LLM lee inputs masivos (como
+  cientos de lineas de codigo), tiende a olvidar las instrucciones redactadas 
+  en formato de parrafo. La estructura funciona como un ancla cognitiva.
+- Chain of Thought (Cadena de Pensamiento): Usar listas numeradas obliga al 
+  modelo a ejecutar la logica paso a paso. Reduce alucinaciones y omisiones.
+- Zero-Shot vs Conversacional: En un chat, corriges al agente si se equivoca. 
+  En un Skill (Zero-Shot automatizado), el agente debe acertar a la primera 
+  mientras interactua con herramientas. Requiere mayor rigidez.
+- Mantenibilidad: Es mas facil agregar/modificar un punto (bullet point) en 
+  una lista que reescribir un parrafo narrativo sin alterar su semantica.
+
+3. PRAGMATISMO: ¿CUANDO USAR QUE?
+--------------------------------------------------------------------------------
+- Enfoque "Matamoscas" (Prompt simple): 
+  Ideal para uso personal, tareas de 1 o 2 pasos, o cuando toleras 
+  variabilidad en la respuesta. (Ej. "Revisa esto y dime X en español").
+- Enfoque "Escopeta" (Prompt estructurado): 
+  Obligatorio para herramientas de equipo, procesos de multiples pasos 
+  estrictos (analizar -> contrastar -> ejemplificar), o cuando el input del 
+  usuario es altamente impredecible o denso.
+
+4. PLANTILLA DE ESTRUCTURA (Para tareas complejas/estrictas)
+--------------------------------------------------------------------------------
+Usa esta arquitectura de 4 bloques cuando necesites el maximo control sobre
+el comportamiento del agente en un skill.
+
+[INICIO DE LA PLANTILLA]
+
+# [Nombre del Skill / Rol]
+Eres un [ROL ESPECIFICO, ej. Ingeniero DevOps Senior]. Tu objetivo es 
+[PROPOSITO PRINCIPAL].
+
+# Contexto (Opcional)
+[AQUI DESCRIBES COMO FUNCIONA EL ENTORNO O QUE HERRAMIENTAS SE USAN. Ej: 
+El usuario proporcionara un log de errores de AWS].
+
+# Instrucciones
+Ejecuta estrictamente los siguientes pasos en orden:
+1. Analizar: [Que debe mirar primero]
+2. Diagnosticar: [Que debe deducir o procesar de esa informacion]
+3. Ejecutar/Generar: [Que debe crear, comparar o contrastar]
+4. Presentar: [Como debe mostrar la informacion al usuario final]
+
+# Restricciones
+- [REGLA DE IDIOMA, ej. Toda la respuesta debe ser en español].
+- [REGLA DE FORMATO, ej. No uses bloques de codigo, usa solo texto plano].
+- [REGLA NEGATIVA, ej. Bajo ninguna circunstancia inventes datos si no estan].
