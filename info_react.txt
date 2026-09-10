@@ -1,0 +1,11 @@
+instalacion
+    sudo apt install npm
+
+el siguiente comando instala dependencias y crea package-lock.json y node_modules/
+    npm install
+
+luego para levantar un servidor de desarrollo en http://localhost:5173.
+    npm run dev
+
+---
+"vite" es una herramienta estandar de build y desarrollo con react desde 2026. Vercel la reconoce. 
