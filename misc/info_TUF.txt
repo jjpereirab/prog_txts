@@ -5,3 +5,7 @@ https://askubuntu.com/questions/244387/how-to-diagnose-random-freezes
 
 2 asus tuf crashes microsoft forum - "max processor state"
 https://answers.microsoft.com/en-us/windows/forum/all/repeated-crashes-and-bsod-on-asus-tuf-a15/6bee2a65-2715-4cb0-b69a-4003eac941bf?page=2
+
+---
+Desactivar la aceleración por hardware
+	chrome://settings/system
