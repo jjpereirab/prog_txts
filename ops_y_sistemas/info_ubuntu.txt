@@ -138,3 +138,9 @@ pdftotext is a command-line tool from the poppler-utils system package
      
 use 
 	pdftotext doc.pdf doc.txt
+
+---
+chequear servidor grafico (x11 o waylan)
+	echo $XDG_SESSION_TYPE
+
+---
